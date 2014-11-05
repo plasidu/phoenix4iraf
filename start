@@ -4,24 +4,31 @@
 
 # Uncomment 'read' to require user input
 read -p "UT date of the begining of observation (YYYY MM DD): " YYYY MM DD
-read -p "Input file name (can be path): " input
+read -p "Input file name (can be full path or file or link in this dir): " input
 
 
 # Get star coordinates from SIMBAD, if used, user input and manual variable set should be commented 
 mkdir tmp; cd tmp
-read -p "Object name with blank space, case non-sensitive (e.g. BW Leo, bw leo): " label
+read -p "Object's name with blank space, case non-sensitive (e.g. BW Leo, dt cam): " label
+echo "Temporary directory made"
 label_wget=${label/ /%20}
 wget 'http://simbad.u-strasbg.fr/simbad/sim-id?output.format=ASCII&Ident='$label_wget'' -O simbad
 cat simbad | grep 'nullCoordinates' > coor
+
+if ! [ "`cat simbad`" == "" ]; then
+	echo "Data downloaded"
+else
+	echo "Failed to download data"
+fi
+
 while read i ; do array=($i) ; ra=`python3 -c 'print('${array[1]}'+'${array[2]}'/60+'${array[3]}'/3600)'`; dec=`python3 -c 'print('${array[4]}'+'${array[5]}'/60+'${array[6]}'/3600)'`; done < coor
-cd .. ; rm -r tmp
+cd .. ; rm -r tmp; echo "Temporary directory removed"
 
 if [ "$ra" == "" ]; then
 	read -p "Objects's right ascention (eq2000): " ra
 	read -p "Objects's declination (eq2000): " dec
-else
-	echo "Coordinates acquired"
 fi
+	echo "Objects's coordinates acquired"
 
 # Uncomment and set variables for iterative task and/or debugging
 #ra=10
@@ -34,6 +41,7 @@ fi
 
 # Format the file for bash arrays
 vim $input -c '%s/  / /g' -c '%s/:/ /g' -c 'x'
+echo "Input file formated"
 
 # Determine the amount of objects in data by finding highest id
 while read i
@@ -45,7 +53,8 @@ for v in ${collector[@]}; do
 	if (( $v > $max )); then max=$v; fi;
 star_total=$max
 done
-
+printf "Amount of selected objects in input is: "; echo "$star_total"
+echo "Computing..."
 
 # Leap years are untreated
 longmonths="01 03 05 07 08"
@@ -90,6 +99,7 @@ while read i
 	done < $input > output.dat
 
 # Plot output stream into separate png images
+echo "Plotting..."
 printf "set term png\nset xtics 0.1\nset output 'V-C.png'\nplot 'output.dat' u 1:(\$3-\$4) title 'V-C'\n" > plot_output.gp
 for i in $(seq 1 $(($star_total-2)))
 do printf "set output \'V-K"$i".png\'\nplot 'output.dat' u 1:(\$3-\$$(($i+4))) title 'V-K$i'\n" >> plot_output.gp
@@ -97,3 +107,4 @@ done
 
 gnuplot plot_output.gp
 
+echo "Done"
