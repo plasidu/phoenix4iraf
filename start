@@ -37,7 +37,7 @@ fi
 #MM=12
 #DD=31
 #star_total=3
-#input='phot.dat'
+#input='phot_R.dat'
 
 # Format the file for bash arrays
 vim $input -c '%s/  / /g' -c '%s/:/ /g' -c 'x'

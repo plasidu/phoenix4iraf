@@ -1,7 +1,0 @@
-in 2.7:
-https://code.google.com/p/astrolibpy/source/browse/astrolib/?r=b90f64233933fbe9392cc0e3c3ccaa6edf86696e
-in 3.3:
-sum(gcal2jd(YYYY, M, D,), ((HH+((MM+(SS/60))/60))/24))
-NOTE: for lib direct search, do sys.path.append('path') (2.7)
-extracting values, bash: while read i; do array=($i); echo "${array[1]}" ; done < phot_R.dat
-extracting values and put them to python3: while read i; do array=($i); python3 get_jd.py 2014 01 22 ${array[0]} ${array[1]} ${array[2]}; done < phot_R.dat

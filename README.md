@@ -11,7 +11,8 @@ Script requires installed vi(m), gnuplot, bash(-like environment with cat, wget 
 
 --INSTALLATION:
 Install numpy and jdcal with pip or easy_install into python3 (sudo python3 -m easy_install jdcal).
-Extract phoenix4iraf.gz.tar with tar -xzf phoenix4iraf.gz.tar. This creates working directory phoenix4iraf.
+Download phoenix4iraf.tar.gz from github.
+Extract phoenix4iraf.tar.gz with tar -xzf phoenix4iraf.gz.tar. This creates working directory phoenix4iraf.
 Cd into phoenix4iraf and make install and starting script executable with chmod 744 install start.
 Then use sudo ./install .
 That copies astrolibpy into python3 libraries directory at /usr/lib/python3/dist-packages/. WARNING: if your puthon3 is instaled elsewhere, copy astrolibpy into its libraries directory manualy and edit third line of ../astrolibpy/astrolib/helcorr.py so that it matches its current directory. Install then creates link into script's working directory (ln -s /usr/lib/python3/dist-package/astrolibpy/astrolib/helcorr.py . ). 
