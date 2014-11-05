@@ -24,4 +24,4 @@ Data including midnight of from 29 Feb to 1 Mar will generate date 30 Feb instea
 
 
 
-2014 November 5, Yunnan observatory, plasidu@email.cz
+2014 November 5, Yunnan observatory, plasidu at email dot cz
