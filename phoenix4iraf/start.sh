@@ -3,49 +3,23 @@
 # NOTE: input file should be in format "HH:MM:SS  MAG  ID", which is default for IRAF's "pdump files*mag* "otime, mag, id"", time is UT. Script is intented for processing variable object(s) observations, one comparison object (C) and at least one check object (K). 
 
 # Uncomment 'read' to require user input
-read -p "UT date of the begining of observation (YYYY MM DD): " YYYY MM DD
-read -p "Input file name (can be path): " input
-
-
-# Get star coordinates from SIMBAD, if used, user input and manual variable set should be commented 
-mkdir tmp; cd tmp
-read -p "Object name with blank space, case non-sensitive (e.g. BW Leo, bw leo): " label
-label_wget=${label/ /%20}
-wget 'http://simbad.u-strasbg.fr/simbad/sim-id?output.format=ASCII&Ident='$label_wget'' -O simbad
-cat simbad | grep 'nullCoordinates' > coor
-while read i ; do array=($i) ; ra=`python3 -c 'print('${array[1]}'+'${array[2]}'/60+'${array[3]}'/3600)'`; dec=`python3 -c 'print('${array[4]}'+'${array[5]}'/60+'${array[6]}'/3600)'`; done < coor
-cd .. ; rm -r tmp
-
-if [ "$ra" == "" ]; then
-	read -p "Objects's right ascention (eq2000): " ra
-	read -p "Objects's declination (eq2000): " dec
-else
-	echo "Coordinates acquired"
-fi
+#read -p "Objects's right ascention (eq2000): " ra
+#read -p "Objects's declination (eq2000): " dec
+#read -p "UT date of the begining of observation (YYYY MM DD): " YYYY MM DD
+#read -p "Total number of selected objects in data: " star_total
+#read -p "Input file name: " input
 
 # Uncomment and set variables for iterative task and/or debugging
-#ra=10
-#dec=10
-#YYYY=2014
-#MM=12
-#DD=31
-#star_total=3
-#input='phot.dat'
+ra=11.5
+dec=17.3
+YYYY=2014
+MM=12
+DD=31
+star_total=3
+input='phot_R.dat'
 
 # Format the file for bash arrays
 vim $input -c '%s/  / /g' -c '%s/:/ /g' -c 'x'
-
-# Determine the amount of objects in data by finding highest id
-while read i
-	do array=($i)
-	collector+=("${array[4]}")
-done < $input
-max=0
-for v in ${collector[@]}; do
-	if (( $v > $max )); then max=$v; fi;
-star_total=$max
-done
-
 
 # Leap years are untreated
 longmonths="01 03 05 07 08"

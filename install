@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cp -r astrolibpy /usr/lib/python3/dist-packages
+ln -s /usr/lib/python3/dist-packages/astrolibpy/astrolib/helcorr.py .
